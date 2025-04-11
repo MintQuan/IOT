@@ -1,0 +1,14 @@
+module demo
+(
+input 	  	 CLOCK_50,
+input  [0:0] KEY,
+input  [31:0] dht11_in,
+output [31:0] dht11_out
+);
+system nios_system(
+.clk_clk(CLOCK_50),
+.reset_reset_n(KEY[0]),
+.dht11_0_external_connection_in_port(dht11_in),
+.dht11_0_external_connection_out_port(dht11_out)
+);
+endmodule

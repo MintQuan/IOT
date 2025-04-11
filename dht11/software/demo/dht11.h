@@ -1,0 +1,13 @@
+#ifndef DHT11_H
+#define DHT11_H
+
+#include <stdint.h>
+
+typedef struct {
+    uint8_t temperature;
+    uint8_t humidity;
+} DHT11_Data;
+
+int dht11_read(volatile uint32_t *base, DHT11_Data *result);
+
+#endif

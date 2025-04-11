@@ -1,0 +1,16 @@
+#ifndef DHT11_H_
+#define DHT11_H_
+
+#include <stdint.h>
+#include <stdbool.h>
+
+// Hàm khởi tạo PIO DHT11 (nếu cần)
+void DHT11_init(void);
+
+// Gửi yêu cầu lấy dữ liệu từ cảm biến
+bool DHT11_read(uint8_t *temperature, uint8_t *humidity);
+
+// Delay vi mô (thường cần điều chỉnh theo tần số CPU)
+void delay_us(unsigned int us);
+
+#endif /* DHT11_H_ */

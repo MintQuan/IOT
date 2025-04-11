@@ -1,0 +1,77 @@
+/*
+ * dht11.c
+ *
+ *  Created on: Apr 11, 2025
+ *      Author: nguye
+ */
+
+#include "dht11.h"
+#include "system.h"
+#include "alt_types.h"
+#include "altera_avalon_pio_regs.h"
+#include <unistd.h>
+
+#define DHT_DIR_INPUT(base)  IOWR_ALTERA_AVALON_PIO_TRI_MASK((base), 0xFFFFFFFF)
+#define DHT_DIR_OUTPUT(base) IOWR_ALTERA_AVALON_PIO_TRI_MASK((base), 0x00000000)
+
+#define DHT_WRITE_LOW(base)  IOWR_ALTERA_AVALON_PIO_DATA((base), 0)
+#define DHT_WRITE_HIGH(base) IOWR_ALTERA_AVALON_PIO_DATA((base), 1)
+
+#define DHT_READ(base)       (IORD_ALTERA_AVALON_PIO_DATA((base)) & 1)
+
+static void delay_us(unsigned int us) {
+    usleep(us); // 1 us
+}
+
+static int wait_for_level(volatile uint32_t *base, int level, int timeout_us) {
+    while (timeout_us--) {
+        if (DHT_READ(base) == level)
+            return 0;
+        delay_us(1);
+    }
+    return -1;
+}
+
+static uint8_t read_byte(volatile uint32_t *base) {
+    uint8_t byte = 0;
+    for (int i = 0; i < 8; i++) {
+        while (DHT_READ(base) == 0);
+        delay_us(30);
+        if (DHT_READ(base)) {
+            byte |= (1 << (7 - i));
+        }
+        while (DHT_READ(base));
+    }
+    return byte;
+}
+
+int dht11_read(volatile uint32_t *base, DHT11_Data *result) {
+    uint8_t data[5] = {0};
+
+    DHT_DIR_OUTPUT(base);
+    DHT_WRITE_LOW(base);
+    usleep(18000);
+    DHT_WRITE_HIGH(base);
+    delay_us(40);
+    DHT_DIR_INPUT(base);
+
+    if (wait_for_level(base, 0, 100)) return 1;
+    if (wait_for_level(base, 1, 100)) return 2;
+    if (wait_for_level(base, 0, 100)) return 3;
+
+    for (int i = 0; i < 5; i++) {
+        data[i] = read_byte(base);
+    }
+
+    if ((uint8_t)(data[0] + data[1] + data[2] + data[3]) != data[4]) {
+        return 4; // checksum error
+    }
+
+    result->humidity = data[0];
+    result->temperature = data[2];
+
+    return 0; // success
+}
+
+
+

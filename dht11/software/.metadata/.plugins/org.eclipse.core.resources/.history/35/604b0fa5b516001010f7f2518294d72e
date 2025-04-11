@@ -1,0 +1,24 @@
+#ifndef DHT11_H_
+#define DHT11_H_
+
+#include "system.h"
+#include "altera_avalon_pio_regs.h"
+#include "io.h"
+#include <stdint.h>
+
+// Tự định nghĩa macro direction nếu chưa có
+#ifndef IOWR_ALTERA_AVALON_PIO_DIRECTION
+#define IOWR_ALTERA_AVALON_PIO_DIRECTION(base, data) \
+    IOWR(base, 2, data)
+#endif
+
+#define DHT11_SET_INPUT()  IOWR_ALTERA_AVALON_PIO_DIRECTION(DHT11_0_BASE, 0)
+#define DHT11_SET_OUTPUT() IOWR_ALTERA_AVALON_PIO_DIRECTION(DHT11_0_BASE, 1)
+
+#define DHT11_READ()  IORD(DHT11_0_BASE, 0)
+#define DHT11_WRITE(x) IOWR(DHT11_0_BASE, 0, x)
+
+void DHT11_init(void);
+int DHT11_read(uint8_t *temperature, uint8_t *humidity);
+
+#endif /* DHT11_H_ */

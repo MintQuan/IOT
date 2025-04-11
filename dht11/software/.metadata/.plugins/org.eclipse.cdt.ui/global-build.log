@@ -1,0 +1,17 @@
+16:16:48 **** Build of configuration Nios II for project dht11_demo ****
+make all 
+Info: Building ../dht11_demo_bsp/
+C:/intelFPGA_lite/18.1/nios2eds/bin/gnu/H-x86_64-mingw32/bin/make --no-print-directory -C ../dht11_demo_bsp/
+[BSP build complete]
+Info: Compiling dht11.c to obj/default/dht11.o
+nios2-elf-gcc -xc -MP -MMD -c -I../dht11_demo_bsp//HAL/inc -I../dht11_demo_bsp/ -I../dht11_demo_bsp//drivers/inc  -pipe -D__hal__ -DALT_NO_INSTRUCTION_EMULATION -DALT_USE_SMALL_DRIVERS -DSMALL_C_LIB -DALT_SINGLE_THREADED    -O0 -g -Wall   -mno-hw-div -mno-hw-mul -mno-hw-mulx -mgpopt=global  -o obj/default/dht11.o dht11.c
+Info: Compiling source.c to obj/default/source.o
+nios2-elf-gcc -xc -MP -MMD -c -I../dht11_demo_bsp//HAL/inc -I../dht11_demo_bsp/ -I../dht11_demo_bsp//drivers/inc  -pipe -D__hal__ -DALT_NO_INSTRUCTION_EMULATION -DALT_USE_SMALL_DRIVERS -DSMALL_C_LIB -DALT_SINGLE_THREADED    -O0 -g -Wall   -mno-hw-div -mno-hw-mul -mno-hw-mulx -mgpopt=global  -o obj/default/source.o source.c
+Info: Linking dht11_demo.elf
+nios2-elf-g++  -T'../dht11_demo_bsp//linker.x' -msys-crt0='../dht11_demo_bsp//obj/HAL/src/crt0.o' -msys-lib=hal_bsp -L../dht11_demo_bsp/  -msmallc  -Wl,-Map=dht11_demo.map   -O0 -g -Wall   -mno-hw-div -mno-hw-mul -mno-hw-mulx -mgpopt=global  -o dht11_demo.elf obj/default/dht11.o obj/default/source.o -lm -msys-lib=m
+nios2-elf-insert dht11_demo.elf --thread_model hal --cpu_name nios2_gen2_0 --qsys true --simulation_enabled false --stderr_dev jtag_uart_0 --stdin_dev jtag_uart_0 --stdout_dev jtag_uart_0 --sopc_system_name system --quartus_project_dir "D:/THIOT/dht11" --jdi ../..//output_files/demo.jdi --sopcinfo D:/THIOT/dht11/software/dht11_demo_bsp/../../system.sopcinfo
+Info: (dht11_demo.elf) 9304 Bytes program size (code + initialized data).
+Info:                  22 KBytes free for stack + heap.
+Info: Creating dht11_demo.objdump
+nios2-elf-objdump --disassemble --syms --all-header --source dht11_demo.elf >dht11_demo.objdump
+[dht11_demo build complete]
